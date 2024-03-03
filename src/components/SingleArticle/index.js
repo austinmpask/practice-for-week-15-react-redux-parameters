@@ -1,19 +1,27 @@
-import './SingleArticle.css';
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import "./SingleArticle.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { loadArticles } from "../../store/articleReducer";
 
 const SingleArticle = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const articles = useSelector((state) => state.articleState.entries);
+
+  const selectedArticle = articles.find((article) => {
+    return article.id === id;
+  });
+  console.log(selectedArticle);
+  useEffect(() => {
+    dispatch(loadArticles());
+  }, [dispatch]);
+
   return (
-    <div className='singleArticle'>
-      <h1>Why Am I At Home</h1>
-      <img
-        src='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Frobcain%2Ffiles%2F2017%2F10%2FKevin-Home-Alone.jpg'
-        alt='home'
-      />
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex esse
-        laboriosam officia accusantium veritatis fugiat exercitationem vero
-        autem nihil aliquid ullam recusandae, quis odit odio voluptates
-        explicabo nobis! Consequuntur, aliquam?
-      </p>
+    <div className="singleArticle">
+      <h1>{selectedArticle.title}</h1>
+      <img src={selectedArticle.imageUrl} alt="home" />
+      <p>{selectedArticle.body}</p>
     </div>
   );
 };
